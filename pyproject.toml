@@ -16,4 +16,5 @@ dependencies = [
     "ipykernel",
     "nbformat",
     "nbconvert",
+    "gdown",
 ]

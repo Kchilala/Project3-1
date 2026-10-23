@@ -17,6 +17,7 @@ The project re-implements the human-activity-recognition (HAR) models and pre-pr
 | **Experiments** — [`csi_experiments.py`](csi_experiments.py), [`run_all.py`](run_all.py) | One function, `run_har(model, task, protocol)`, runs a full experiment and caches the result; `run_all.py` runs the whole grid |
 | **ESP32 pipeline** — [`csi_esp32.py`](csi_esp32.py) | Parse our ESP32 CSV files, resample, normalise, leak-free cross-validation, motion detector |
 | **Notebook** — [`csi_har_experiments.ipynb`](csi_har_experiments.ipynb) | Explains every step and every decision, shows all plots and results |
+| **Data download** — [`download_data.py`](download_data.py) | Fetches the datasets from Google Drive (data is not stored in git) |
 
 ### Papers reproduced
 
@@ -97,6 +98,7 @@ Python ≥ 3.12. Dependencies are listed in [`pyproject.toml`](pyproject.toml).
 
 ```bash
 uv sync                    # or: pip install -e .
+python download_data.py    # fetch the data (see Data below)
 ```
 
 **GPU.** Training uses the best available device (`csi_train.get_device()`):
@@ -118,12 +120,28 @@ python -c "import torch; print(torch.xpu.is_available())"
 
 ## Data
 
-| Dataset | Where | In this repo? |
-|---|---|---|
-| Zhuravchak et al. HAR dataset (Atheros CSI tool, 5 GHz, 2×2 antennas, 114 subcarriers, 3 rooms, 7 activities, 1.1 GB) | <https://doi.org/10.6084/m9.figshare.14386892.v1> | **No** (too large for GitHub) — download it and unpack to `data/wifi_csi_har_dataset (3)/room_*/<n>/{data,label}.csv`, or change `DATA_ROOT` in `csi_experiments.py` |
-| Own ESP32 recordings (2.4 GHz, 1 antenna, 64 subcarriers) | `data/self_extracted_dataset/*.csv` | yes |
+The data is **not stored in git**. Download it from Google Drive with:
 
-The HAR `data.csv` files have no header: 114 subcarrier-index columns (ignored), 456 amplitudes, then 456 phases (4 antenna pairs × 114 subcarriers).
+```bash
+python download_data.py            # all datasets -> data/
+python download_data.py esp32      # only our ESP32 recordings
+```
+
+| Dataset | Size | Unpacked to |
+|---|---|---|
+| `har`: Zhuravchak et al. HAR dataset (Atheros CSI tool, 5 GHz, 2×2 antennas, 114 subcarriers, 3 rooms, 7 activities) | 490 MB zip / 1.1 GB | `data/wifi_csi_har_dataset/room_*/<n>/{data,label,label_boxes}.csv` |
+| `esp32`: our own ESP32 recordings (2.4 GHz, 1 antenna, 64 subcarriers): empty room, standing still, moving | 1 MB | `data/self_extracted_dataset/*.csv` |
+
+The HAR dataset is also available from its authors at <https://doi.org/10.6084/m9.figshare.14386892.v1>. If you download it from there, unpack it so that `data/wifi_csi_har_dataset/room_1/1/data.csv` exists.
+
+The HAR `data.csv` files have no header: 114 subcarrier-index columns (ignored), then 456 amplitudes, then 456 phases (4 antenna pairs × 114 subcarriers).
+
+**Maintainers: publishing a new data version**
+
+1. Run `python download_data.py --pack`. This writes the zip files to `dist/`, which is git-ignored.
+2. Upload them to Google Drive.
+3. Share each file as *Anyone with the link → Viewer*.
+4. Paste the share links into `DATASETS` in `download_data.py`.
 
 ## Running
 
@@ -157,9 +175,10 @@ csi_experiments.py       run_har() + MODEL_SPECS
 csi_esp32.py             ESP32 pipeline and blocked cross-validation
 csi_plots.py             plotting helpers
 run_all.py               runs the experiment grid
+download_data.py         downloads the datasets from Google Drive into data/
 csi_har_experiments.ipynb  the documented notebook
 results/                 cached metrics per experiment (JSON)
-data/self_extracted_dataset/  own ESP32 recordings
+data/                    datasets (git-ignored, created by download_data.py)
 ```
 
 ## Next steps

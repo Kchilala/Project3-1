@@ -31,7 +31,10 @@ from csi_models import (PACSI, InceptionTime, ShangLSTM, ShangLSTMCNN, Zhuravcha
 from csi_train import cached_run, metrics, predict, save_model, train_torch_model
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATA_ROOT = os.path.join(HERE, "data", "wifi_csi_har_dataset (3)")
+# data/wifi_csi_har_dataset (from download_data.py) or the original "(3)" folder name
+DATA_ROOT = next((os.path.join(HERE, "data", d) for d in ("wifi_csi_har_dataset", "wifi_csi_har_dataset (3)")
+                  if os.path.isdir(os.path.join(HERE, "data", d))),
+                 os.path.join(HERE, "data", "wifi_csi_har_dataset"))
 CACHE = os.path.join(HERE, "cache")
 GRID_STEP = 16          # one target packet every 16 packets
 HISTORY = 1024          # longest window -> first usable target per recording

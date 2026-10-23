@@ -12,6 +12,7 @@ wheels/
 # Data is not stored in git - download it with `python download_data.py` (see README)
 data/
 *.zip
+dist/
 
 # Generated artefacts (re-created by running the code)
 cache/
