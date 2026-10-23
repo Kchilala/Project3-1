@@ -17,7 +17,7 @@ The project re-implements the human-activity-recognition (HAR) models and pre-pr
 | **Experiments** — [`csi_experiments.py`](csi_experiments.py), [`run_all.py`](run_all.py) | One function, `run_har(model, task, protocol)`, runs a full experiment and caches the result; `run_all.py` runs the whole grid |
 | **ESP32 pipeline** — [`csi_esp32.py`](csi_esp32.py) | Parse our ESP32 CSV files, resample, normalise, leak-free cross-validation, motion detector |
 | **Notebook** — [`csi_har_experiments.ipynb`](csi_har_experiments.ipynb) | Explains every step and every decision, shows all plots and results |
-| **Data download** — [`download_data.py`](download_data.py) | Fetches the datasets from Google Drive (data is not stored in git) |
+| **Data download** — [`download_data.py`](download_data.py) | Fetches the datasets from Google Drive (data is not stored in git) (https://drive.google.com/drive/folders/1ZG4UTH3dlNRj9OvsXLfD3wJL4MGJSGL5?usp=sharing) |
 
 ### Papers reproduced
 
