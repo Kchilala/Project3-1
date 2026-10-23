@@ -1,0 +1,20 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Data is not stored in git - download it with `python download_data.py` (see README)
+data/
+*.zip
+
+# Generated artefacts (re-created by running the code)
+cache/
+models/
+run_all.log
+.ipynb_checkpoints/
